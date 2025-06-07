@@ -46,6 +46,8 @@ private slots:
 
     // 新增：处理通义千问回复的槽函数
     void handleTongyiMessageResponse(const QString &from, const QString &content, qint64 timestamp, bool success);
+    // 新增：处理文件消息的槽函数
+    void handleFileMessageReceived(const QString &from, const QString &to, const QString &fileName, const QString &fileId, qint64 fileSize, qint64 timestamp);
     // void handleSocketIoConnected(); // 从您上传的文件看，这个槽并未在.h中声明，我们将保持一致
 
 private:

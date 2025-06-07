@@ -26,7 +26,7 @@ public:
     void uploadFile(const QString &filePath, const QString &recipient, const QString &authToken);
     
     // 下载文件从服务器
-    void downloadFile(const QString &fileId, const QString &fileName, const QString &authToken);
+    void downloadFile(const QString &fileId, const QString &fileName, const QString &authToken, const QString &savePath = QString());
     
     // 获取文件列表
     void getFileList(const QString &authToken);

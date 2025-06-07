@@ -314,10 +314,7 @@ void PrivateChat::appendFileMessage(const QString &sender, const QString &fileNa
     }
     
     QString downloadButton = "";
-    if (!isMe) {
-        downloadButton = QString("<br><button onclick='downloadFile(\"%1\", \"%2\")'style='background-color: #4CAF50; color: white; padding: 5px 10px; border: none; border-radius: 3px; cursor: pointer;'>下载文件</button>")
-            .arg(fileId, fileName);
-    }
+    // 下载按钮已移除，下载逻辑在接收文件消息时处理
     
     QString formattedMessage;
     if (isMe) {
@@ -366,7 +363,7 @@ void PrivateChat::appendFileMessage(const QString &sender, const QString &fileNa
                 // 开始下载
                 FileTransferManager *ftm = m_chatClient->getFileTransferManager();
                 if (ftm) {
-                    ftm->downloadFile(fileId, fileName, "");
+                    ftm->downloadFile(fileId, fileName, "", savePath);
                 }
             }
         }

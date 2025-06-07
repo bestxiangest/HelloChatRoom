@@ -35,6 +35,8 @@ private slots:
     void onFileUploadFinished(const QString &fileName, const QString &fileId, bool success, const QString &errorMessage);
     void onFileDownloadProgress(const QString &fileName, qint64 bytesReceived, qint64 bytesTotal);
     void onFileDownloadFinished(const QString &fileName, const QString &localPath, bool success, const QString &errorMessage);
+
+public slots:
     void onFileMessageReceived(const QString &from, const QString &to, const QString &fileName, const QString &fileId, qint64 fileSize, qint64 timestamp);
 
 private:

@@ -39,6 +39,8 @@ MainWindow::MainWindow(ChatClient *client, QWidget *parent) :
 
     // 新增：连接通义千问的回复信号
     connect(m_chatClient, &ChatClient::tongyiMessageResponseReceived, this, &MainWindow::handleTongyiMessageResponse);
+    // 新增：连接文件消息信号
+    connect(m_chatClient, &ChatClient::fileMessageReceived, this, &MainWindow::handleFileMessageReceived);
 
     ui->chatDisplayBrowser->setHtml("<p style='color:grey;'><i>选择一个联系人或群组开始聊天。</i></p>");
     ui->usernameLabel->setText("未登录");
@@ -55,6 +57,7 @@ MainWindow::~MainWindow()
         disconnect(m_chatClient, &ChatClient::serverMessage, this, &MainWindow::handleServerMessage);
         disconnect(m_chatClient, &ChatClient::disconnected, this, &MainWindow::handleClientDisconnected);
         disconnect(m_chatClient, &ChatClient::tongyiMessageResponseReceived, this, &MainWindow::handleTongyiMessageResponse);
+        disconnect(m_chatClient, &ChatClient::fileMessageReceived, this, &MainWindow::handleFileMessageReceived);
     }
 
     // Close and delete all active private chat windows
@@ -338,4 +341,38 @@ void MainWindow::on_emojiButton_clicked()
 void MainWindow::on_fileButton_clicked()
 {
     QMessageBox::information(this, "提示", "文件发送功能尚未实现。");
+}
+
+void MainWindow::handleFileMessageReceived(const QString &from, const QString &to, const QString &fileName, const QString &fileId, qint64 fileSize, qint64 timestamp)
+{
+    // 检查是否是发给当前用户的文件消息
+    if (to != m_currentUsername) {
+        return;
+    }
+    
+    // 查找或创建与发送者的私聊窗口
+    PrivateChat *chatWindow = nullptr;
+    if (m_activePrivateChats.contains(from)) {
+        chatWindow = m_activePrivateChats.value(from);
+    } else {
+        // 创建新的私聊窗口
+        chatWindow = new PrivateChat(m_chatClient, this);
+        chatWindow->setChatPartner(from, m_currentUsername);
+        m_activePrivateChats.insert(from, chatWindow);
+        
+        // 连接窗口关闭信号
+        connect(chatWindow, &PrivateChat::finished, this, [this, from]() {
+            m_activePrivateChats.remove(from);
+        });
+    }
+    
+    // 显示窗口并激活
+    chatWindow->show();
+    chatWindow->raise();
+    chatWindow->activateWindow();
+    
+    // 手动触发文件消息处理
+    chatWindow->onFileMessageReceived(from, to, fileName, fileId, fileSize, timestamp);
+    
+    qDebug() << "MainWindow: Routed file message from" << from << "to PrivateChat window";
 }

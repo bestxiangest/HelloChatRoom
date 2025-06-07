@@ -11,7 +11,7 @@
 FileTransferManager::FileTransferManager(QObject *parent)
     : QObject(parent)
     , m_networkManager(new QNetworkAccessManager(this))
-    , m_serverBaseUrl("http://localhost:8080") // 指向我们的文件传输服务器
+    , m_serverBaseUrl("http://localhost:5000") // 指向我们的文件传输服务器
 {
     // 连接网络管理器的信号
     connect(m_networkManager, &QNetworkAccessManager::finished, this, [this](QNetworkReply *reply) {
@@ -91,33 +91,46 @@ void FileTransferManager::uploadFile(const QString &filePath, const QString &rec
     qDebug() << "FileTransferManager: Started uploading file" << fileInfo.fileName() << "to" << recipient;
 }
 
-void FileTransferManager::downloadFile(const QString &fileId, const QString &fileName, const QString &authToken)
+void FileTransferManager::downloadFile(const QString &fileId, const QString &fileName, const QString &authToken, const QString &savePath)
 {
-    // 创建下载目录
-    QString downloadDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
-    if (downloadDir.isEmpty()) {
-        downloadDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    }
-    downloadDir += "/ChatRoomDownloads";
+    QString localFilePath;
     
-    QDir dir;
-    if (!dir.exists(downloadDir)) {
-        dir.mkpath(downloadDir);
-    }
-    
-    QString localFilePath = downloadDir + "/" + fileName;
-    
-    // 如果文件已存在，添加数字后缀
-    int counter = 1;
-    QString baseName = QFileInfo(fileName).baseName();
-    QString extension = QFileInfo(fileName).suffix();
-    while (QFile::exists(localFilePath)) {
-        if (extension.isEmpty()) {
-            localFilePath = QString("%1/%2(%3)").arg(downloadDir, baseName, QString::number(counter));
-        } else {
-            localFilePath = QString("%1/%2(%3).%4").arg(downloadDir, baseName, QString::number(counter), extension);
+    if (!savePath.isEmpty()) {
+        // 使用用户指定的保存路径
+        localFilePath = savePath;
+        
+        // 确保目录存在
+        QDir dir = QFileInfo(localFilePath).absoluteDir();
+        if (!dir.exists()) {
+            dir.mkpath(".");
         }
-        counter++;
+    } else {
+        // 使用默认下载目录
+        QString downloadDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation);
+        if (downloadDir.isEmpty()) {
+            downloadDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+        }
+        downloadDir += "/ChatRoomDownloads";
+        
+        QDir dir;
+        if (!dir.exists(downloadDir)) {
+            dir.mkpath(downloadDir);
+        }
+        
+        localFilePath = downloadDir + "/" + fileName;
+        
+        // 如果文件已存在，添加数字后缀
+        int counter = 1;
+        QString baseName = QFileInfo(fileName).baseName();
+        QString extension = QFileInfo(fileName).suffix();
+        while (QFile::exists(localFilePath)) {
+            if (extension.isEmpty()) {
+                localFilePath = QString("%1/%2(%3)").arg(downloadDir, baseName, QString::number(counter));
+            } else {
+                localFilePath = QString("%1/%2(%3).%4").arg(downloadDir, baseName, QString::number(counter), extension);
+            }
+            counter++;
+        }
     }
     
     QFile *file = new QFile(localFilePath);
