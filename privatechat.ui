@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PrivateChat</class>
+ <widget class="QDialog" name="PrivateChat">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>500</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>与 [用户名] 的私聊</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+QDialog#PrivateChat {
+    background-color: #f0f2f5;
+}
+
+QWidget#chatInfoWidget {
+    background-color: #e8eaf6; /* Light indigo, similar to user info in main window */
+    border-bottom: 1px solid #d0d4dc;
+}
+
+QLabel#chatPartnerNameLabel {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    padding: 8px;
+}
+
+QLabel#chatPartnerStatusLabel {
+    font-size: 12px;
+    color: #555;
+    padding: 0px 8px 8px 8px;
+}
+
+QTextBrowser#messageDisplayBrowser {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: white;
+    padding: 10px;
+    font-size: 14px;
+}
+
+QTextEdit#messageInputEdit {
+    border: 1px solid #d0d0d0;
+    border-radius: 8px;
+    padding: 8px;
+    background-color: white;
+    font-size: 14px;
+    min-height: 60px; /* Ensure a decent minimum height */
+}
+QTextEdit#messageInputEdit:focus {
+    border: 1px solid #4A90E2;
+}
+
+QPushButton#sendButton {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 14px;
+    font-weight: bold;
+}
+QPushButton#sendButton:hover {
+    background-color: #45a049;
+}
+QPushButton#sendButton:pressed {
+    background-color: #3e8e41;
+}
+
+/* Toolbar buttons styling (similar to MainWindow) */
+QPushButton#emojiButton, QPushButton#fileButton {
+    background-color: transparent;
+    border: none;
+    padding: 5px;
+    font-size: 18px; /* Adjust as needed */
+    color: #555;
+}
+QPushButton#emojiButton:hover, QPushButton#fileButton:hover {
+    color: #0078d4; /* Highlight color */
+}
+
+QFrame#messageToolbarFrame {
+    border-top: 1px solid #e0e0e0; /* Separator line */
+    padding-top: 5px;
+}
+   </string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_Main">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>5</number>
+   </property>
+   <item>
+    <widget class="QWidget" name="chatInfoWidget" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout_Info">
+      <property name="leftMargin">
+       <number>10</number>
+      </property>
+      <property name="topMargin">
+       <number>5</number>
+      </property>
+      <property name="rightMargin">
+       <number>10</number>
+      </property>
+      <property name="bottomMargin">
+       <number>5</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="chatPartnerAvatarLabel">
+        <property name="minimumSize">
+         <size>
+          <width>40</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>40</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap>:/icons/default_avatar.png</pixmap> </property>
+        <property name="scaledContents">
+         <bool>true</bool>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_PartnerInfo">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="chatPartnerNameLabel">
+          <property name="text">
+           <string>对方用户名</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="chatPartnerStatusLabel">
+          <property name="text">
+           <string>在线</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_Info">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTextBrowser" name="messageDisplayBrowser">
+     <property name="styleSheet">
+      <string notr="true">/* Specific styles for message bubbles will be applied via HTML content */</string>
+     </property>
+     <property name="html">
+      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'SimSun'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;开始聊天...&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="messageToolbarFrame">
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_Toolbar">
+      <property name="spacing">
+       <number>5</number>
+      </property>
+      <property name="leftMargin">
+       <number>10</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>10</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="emojiButton">
+        <property name="toolTip">
+         <string>表情</string>
+        </property>
+        <property name="text">
+         <string>😀</string>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="fileButton">
+        <property name="toolTip">
+         <string>发送文件</string>
+        </property>
+        <property name="text">
+         <string>📄</string>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="flat">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_Toolbar">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTextEdit" name="messageInputEdit">
+     <property name="placeholderText">
+      <string>输入消息...</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_Actions">
+     <property name="leftMargin">
+      <number>10</number>
+     </property>
+     <property name="rightMargin">
+      <number>10</number>
+     </property>
+     <property name="bottomMargin">
+      <number>5</number>
+     </property>
+     <item>
+      <spacer name="horizontalSpacer_Actions">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="sendButton">
+       <property name="text">
+        <string>发送</string>
+       </property>
+       <property name="shortcut">
+        <string>Ctrl+Return</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  </resources>
+ <connections/>
+</ui>
