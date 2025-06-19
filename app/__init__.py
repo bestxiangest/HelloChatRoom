@@ -20,7 +20,7 @@ def create_app(debug=False):
     """应用工厂函数"""
     app = Flask(__name__)
     app.debug = debug
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'a_very_secret_and_random_key_that_you_should_change')
+    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'asdfghjkl')
 
     CORS(app, resources={r"/*": {"origins": "*"}})
 

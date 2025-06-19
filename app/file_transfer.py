@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 文件传输功能模块
 用于HelloChatRoom的文件传输功能
