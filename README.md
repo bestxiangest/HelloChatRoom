@@ -169,7 +169,7 @@ mingw32-make
 
 ## 👥 作者
 
-- **开发者** - [Your Name](https://github.com/yourusername)
+- **开发者** - [Sharpcaterpillar](https://github.com/bestxiangest)
 
 ## 🙏 致谢
 
@@ -182,7 +182,7 @@ mingw32-make
 
 如有问题或建议，请通过以下方式联系：
 - 提交 [Issue](https://github.com/yourusername/HelloChatRoom/issues)
-- 发送邮件至：your.email@example.com
+- 发送邮件至：zzningg@qq.com
 
 ---
 
